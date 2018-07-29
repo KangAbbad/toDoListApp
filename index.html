@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>To Do List Apps</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-image: url('img/bg.jpg');
+            background-position: center;
+            background-size: cover;
+            color: white;
+            height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
+            text-transform: capitalize;
+        }
+
+        body::after {
+            background-color: rgba(0, 0, 0, .4);
+            z-index: -1;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: auto;
+        }
+
+        #judul {
+            text-align: center;
+            margin-top: 10vh;
+        }
+
+        .input-box {
+            text-align: center;
+            margin-top: 5vh;
+        }
+
+        .input-box input {
+            background-color: white;
+            border: 2px solid #c3c3c3;
+            width: 70%;
+            height: 20px;
+            border-radius: 10px;
+            color: #444444;
+            font-weight: 700;
+            padding: 10px;
+            font-size: 20px;
+        }
+
+        .input-box button {
+            border: 2px solid #c4c4c4;
+            padding: 10px 40px;
+            border-radius: 10px;
+            color: #ececec;
+            background-color: #2a2a2a;
+            font-size: 18px;
+        }
+
+        .input-box button:hover {
+            background-color: #444444;
+            cursor: pointer;
+        }
+
+        .li {
+            list-style: none;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            font-size: 17px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .li:hover {
+            background-color: darkgray;
+            color: #2a2a2a;
+            border: 2px solid lavender !important;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="judul">LIST</h1>
+        <div class="input-box">
+            <input id="masukkan" type="text" />
+            <button id="tombol">Simpen</button>
+        </div>
+        <br />
+        <br />
+        <ul id="shorting">
+        </ul>
+    </div>
+    <script>
+        const judul = document.getElementById('judul');
+        const masukkan = document.getElementById('masukkan');
+        const tombol = document.getElementById('tombol');
+        const shorting = document.getElementById('shorting');
+
+        // dbList adalah nama storage
+        localData = JSON.parse(localStorage.getItem("dbList"));
+
+        // variabel penampung data list yang di input
+        let data = [];
+
+        if (localData != null) {
+            data = localData;
+        }
+
+        // UBAH JUDUL
+        judul.innerHTML = "WHAT I SUPPOSED TO DO";
+
+        // JIKA DIKLIK
+        tombol.addEventListener('click', function () {
+            // NGEGET DATA DAN SIMPEN DATA KE VARIABEL DATA
+            const getDbList = masukkan.value;
+
+            if (getDbList != "") {
+                // Nambah ke let data yang di luar scope ini
+                data.push(getDbList);
+                // Looping data
+                render();
+                // Biar abis di simpen input box kosong
+                masukkan.value = "";
+                // String Nama disini adalah nama storage
+                localStorage.setItem("dbList", JSON.stringify(data));
+            }
+        });
+
+        masukkan.addEventListener('select', function () {
+            // NGEGET DATA DAN SIMPEN DATA KE VARIABEL DATA
+            const data = masukkan.value;
+            // NAMBAH DATA KE LIST
+            list.innerHTML += "<li>" + data + "</li>";
+            // INPUT VALUE HARUS KOSONG
+            masukkan.value = "";
+        });
+
+        render = () => {
+            let list = "";
+
+            for (let i = 0; i < data.length; i++) {
+                list += `<li class="li" onclick="remove(${i})"> ${ data[i] } </li>`
+            }
+
+            shorting.innerHTML = list;
+        }
+
+        render();
+
+        remove = (id) => {
+            data.splice(id, 1);
+            localStorage.setItem("dbList", JSON.stringify(data));
+            render();
+        }
+    </script>
+</body>
+
+</html>
